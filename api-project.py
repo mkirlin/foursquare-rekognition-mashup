@@ -65,17 +65,6 @@ def detect_faces_in_photos(s3_key_name: str):
 
   return response
 
-def report_on_facial_recognition(photos: list):
-  photos = [photo for photo in photos if len(photo['facial_recognition_analysis']['FaceDetails']) > 0]
-  if photos:
-    print("A series of photos with faces in them will appear as new tabs in your most recent browser window.")
-    print("Here are the analyses of these photos, in left to right tab order.")
-    for photo in photos:
-      webbrowser.open(photo['full_url'], new=2)
-      print_photo_report(photo)
-  else:
-    print("None of the photos in this set had recognizable faces in them.")
-
 def get_conf_mod(confidence_value: float):
   if confidence_value >= 90:
     confidence_modifier = "almost certainly"
@@ -201,6 +190,17 @@ def print_photo_report(photo: dict):
         emotion=most_likely_emotion,
       )
     )
+
+def report_on_facial_recognition(photos: list):
+  photos = [photo for photo in photos if len(photo['facial_recognition_analysis']['FaceDetails']) > 0]
+  if photos:
+    print("A series of photos with faces in them will appear as new tabs in your most recent browser window.")
+    print("Here are the analyses of these photos, in left to right tab order.")
+    for photo in photos:
+      webbrowser.open(photo['full_url'], new=2)
+      print_photo_report(photo)
+  else:
+    print("None of the photos in this set had recognizable faces in them.")
 
 # Actual User Input
 user_zipcode = input("Enter a zipcode to scan a random event for faces: ")
